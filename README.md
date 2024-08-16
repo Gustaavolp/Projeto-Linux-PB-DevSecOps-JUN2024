@@ -1,14 +1,13 @@
 # Projeto-Linux-PB-DevSecOps-JUN2024
 
 Projeto referente a Sprint 4 do Programa de bolsas - DevSecOps - JUN 2024
-
-## Passo a Passo na AWS:
+ 
+## Passo a Passo na AWS
 
 ### Gerando uma chave pública para acesso ao ambiente
 
 
-#### Acesse o Console AWS:
-Navegue até o serviço de EC2:
+#### Navegue até o serviço de EC2:
 
 1. No console da AWS, vá em **Serviços** → **Computação** → **EC2**.
 2. No menu lateral, localize a seção **Rede e segurança** e clique em **Pares de chaves**.
@@ -28,9 +27,9 @@ Navegue até o serviço de EC2:
     - **CostCenter**: `C092000024`
     - **Project**: `PB - JUN 2024`
 
-## Criando uma instância EC2 com Amazon Linux 2
+### Criando uma instância EC2 com Amazon Linux 2
 
-### No serviço EC2
+#### No serviço EC2
    - No menu lateral, localize a seção **Instâncias** e clique em **Instâncias**.
 
 #### Criando uma nova Instancia:
@@ -73,8 +72,8 @@ Navegue até o serviço de EC2:
    - **Tamanho do volume**: `16GB`
    - **Tipo do volume**: `gp2`
 
-## Gerando um Elastic IP e anexando à instância EC2:
-### No serviço EC2
+### Gerando um Elastic IP e anexando à instância EC2:
+#### No serviço EC2
    - No menu lateral, localize a seção **Rede e segurança** e clique em **IPs elásticos**.
 
 #### Alocando um Elastic IP:
@@ -100,8 +99,8 @@ Navegue até o serviço de EC2:
       - **Instância**: `Selecione a instância criada anteriormente`
       - **Endereço IP privado**: `Selecione seu endereço IP alocado anteriomente`
 
-## Liberando as portas de comunicação para acesso público:
-### No serviço EC2
+### Liberando as portas de comunicação para acesso público:
+#### No serviço EC2
    - No menu lateral, localize a seção **Rede e segurança** e clique em **Security groups**.
    1. Selecione o Grupo de Segurança criado anteriomente - `projeto-linux`
    2. Clique em **Ações** → **Editar regras de entrada**
@@ -117,9 +116,9 @@ Navegue até o serviço de EC2:
       | 80 | TCP | 0.0.0.0/0 | TCP/80 - Public Access |
       | 443 | TCP | 0.0.0.0/0 | TCP/443 - Public Access | 
 
-## Criando um sistema de arquivos EFS
+### Criando um sistema de arquivos EFS
 
-Navegue até o serviço de EFS:
+#### Navegue até o serviço de EFS:
 
 1. No console da AWS, vá em **Serviços** → **Armazenamento** → **EFS**.
 2. No menu lateral, localize e acesse na seção **Sistemas de arquivos**
@@ -140,7 +139,7 @@ Navegue até o serviço de EFS:
 5. Troque o `Grupo de segurança` pelo criado anteriormente: `projeto-linux`
 
 #### Configurando o sistema de arquivos:
-### No serviço EFS
+#### No serviço EFS
 1. Selecione o EFS criado anteriormente
 2. Clique em `Visualizar detalhes`
 3. Clique em `Anexar` → `Montar via IP`
@@ -152,16 +151,15 @@ Navegue até o serviço de EFS:
 
 ### Acessando o ambiente Linux
 
-- Acesse a instância Linux
 
-Navegue até o serviço de EC2:
+#### Navegue até o serviço de EC2:
 
 1.  No console da AWS, vá em  **Serviços**  →  **Computação**  →  **EC2**.
-2.  No menu lateral, localize a seção  **Instâncias**  e clique em  **Instâncias**.
+2.  No menu lateral, localize a seção  **Instâncias**  →  **Instâncias**.
 3. Selecione a instância criada anteriormente
 4. Clique em `Conectar`
 
-- Por praticidade irei acessa via `EC2 Instance Connect`
+- Por praticidade irei acessar via `EC2 Instance Connect`
 
 ### Configurando o ambiente Linux
 
@@ -202,16 +200,16 @@ Navegue até o serviço de EC2:
  1. Criando o arquivo do script
 
         sudo nano check_apache.sh
- - Com o seguinte script:
-
-       #!/bin/bash 
-       STATUS=$(systemctl is-active httpd)
-       TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-       if [ "$STATUS" = "active" ]; then
-            echo "$TIMESTAMP Apache ONLINE - Tudo OK" >> /home/ec2-user/efs/Gustavo/apache_online.log
-       else
-            echo "$TIMESTAMP Apache OFFLINE - Verifique o serviço" >> /home/ec2-user/efs/Gustavo/apache_offline.log
-       fi
+    - Com o seguinte script:
+   
+          #!/bin/bash 
+          STATUS=$(systemctl is-active httpd)
+          TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+          if [ "$STATUS" = "active" ]; then
+               echo "$TIMESTAMP Apache ONLINE - Tudo OK" >> /home/ec2-user/efs/Gustavo/apache_online.log
+          else
+               echo "$TIMESTAMP Apache OFFLINE - Verifique o serviço" >> /home/ec2-user/efs/Gustavo/apache_offline.log
+          fi
 
 2. Dando as permissões ao arquivo:
 
@@ -222,6 +220,6 @@ Navegue até o serviço de EC2:
 1. Editando o Crontab
 
        sudo crontab -e
-- Adicione o seguinte script:
+   - Adicione o seguinte script:
 
-      */5 * * * * /home/ec2-user/check_apache.sh
+         */5 * * * * /home/ec2-user/check_apache.sh
