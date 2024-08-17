@@ -102,7 +102,7 @@ Projeto referente a Sprint 4 do Programa de bolsas - DevSecOps - JUN 2024
 ### Liberando as portas de comunicação para acesso público:
 #### No serviço EC2
    - No menu lateral, localize a seção **Rede e segurança** e clique em **Security groups**.
-   1. Selecione o Grupo de Segurança criado anteriomente - `projeto-linux`
+   1. Selecione o Grupo de Segurança criado anteriomente: `projeto-linux`
    2. Clique em **Ações** → **Editar regras de entrada**
    3. Adicione as seguinte regras:
 
